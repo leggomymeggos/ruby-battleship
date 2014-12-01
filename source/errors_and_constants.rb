@@ -28,6 +28,12 @@ class ShipError < StandardError
   end
 end
 
+class UpdateError < StandardError
+  def self.standard
+    "That cannot be updated in that way"    
+  end
+end
+
 module ShipConstants
   def self.ship_hash
     { "Aircraft carrier" => { abbr: "A", length: 5, name: "Aircraft carrier", placed: false }, 

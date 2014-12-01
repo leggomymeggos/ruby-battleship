@@ -43,7 +43,6 @@ class Ship
   include ShipConstants
                  
   attr_reader :ship
-  attr_accessor :placed
 
   def initialize(ship_hopeful)
     @ship = set_ship(ship_hopeful)
@@ -63,6 +62,12 @@ class Ship
 
   def placed
     ship[:placed]
+  end
+
+  def placed=(arg)
+    acceptable = [true, false]
+    raise UpdateError, UpdateError.standard unless acceptable.include? arg
+    ship[:placed] = arg
   end
 
   private
