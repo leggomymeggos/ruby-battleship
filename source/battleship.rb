@@ -185,7 +185,7 @@ class Game
   end
 
   def get_coord(coord)
-    raise InvalidCoordinateError, InvalidCoordinateError.standard unless coord.match(/\A[a-jA-J]\d{1,2}\z/)
+    raise InvalidCoordinateError, InvalidCoordinateError.standard unless coord.match(/\A[a-jA-J]\d{1,2}\z/) # e.g. "B5"; "C10"
 
     coord_arr = []
 

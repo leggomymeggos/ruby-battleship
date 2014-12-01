@@ -26,11 +26,15 @@ class ShipError < StandardError
   def self.already_placed 
     "That ship is already on the board. Please try a different ship."
   end
+
+  def self.space_taken
+    "That space is already taken. Please try placing your ship somewhere else."
+  end
 end
 
 class UpdateError < StandardError
   def self.standard
-    "That cannot be updated in that way"    
+    "That cannot be updated in that way."
   end
 end
 
