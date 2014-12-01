@@ -37,5 +37,10 @@ describe 'Game' do
       game.place_ship("Aircraft carrier", "A1", "vertical")
       expect{ game.place_ship("Aircraft carrier", "F4", "horizontal") }.to raise_error( ShipError )
     end
+
+    it 'doesn\'t allow ships to be placed on top of one another' do
+      game.place_ship("Aircraft carrier", "A1", "vertical")
+      expect{ game.place_ship("Cruiser", "A2", "horizontal") }.to raise_error( ShipError )
+    end
   end
 end

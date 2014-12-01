@@ -1,6 +1,5 @@
 require_relative 'errors_and_constants.rb'
 
-
 class Board
   include BoardConstants
 
@@ -109,11 +108,13 @@ class Game
 
     ship = find_ship(ship_type)
     raise ShipError, ShipError.already_placed if ship.placed == true
+
+    starting_position = get_coord(coord)
+    raise ShipError, ShipError.space_taken unless room_for_ship?(starting_position, ship, direction)
     
     #####################
     # BEGIN SMELLY CODE #
 
-    starting_position = get_coord(coord)
     horz_coord = starting_position[0]
     vert_coord = starting_position[1]
 
@@ -145,21 +146,35 @@ class Game
 
   private
 
-  def room_for_ship?(horz_coord, vert_coord)
-    empty_row?(vert_coord) && empty_column?(horz_coord)
+  def room_for_ship?(coords, ship, direction)
+    vert_coord = coords[1]
+    horz_coord = coords[0]
+    
+    if direction == "horizontal"
+      current_row = row(vert_coord)
+      ending = ((ship.length - 1) + horz_coord)
+      
+      return current_row[horz_coord..ending].all? { |space| space == BoardConstants.blank_space }
+    else
+      current_column = column(horz_coord)
+      ending = ((ship.length - 1) + vert_coord)
 
-  end
-
-  def empty_row?(coord)
-    board[coord - 1].all? { |space| space == BoardConstants.blank_space }
-  end
-
-  def empty_column?(coord)
-    board.all? { |space| space[coord] == BoardConstants.blank_space }
+      return current_column[vert_coord..ending].all? { |space| space == BoardConstants.blank_space }
+    end
   end
 
   def row(coord)
     board[coord]
+  end
+
+  def column(coord)
+    col = []
+    index = 0
+    until col.length == board.length
+      col << board[index][coord]
+      index += 1
+    end
+    col
   end
 
   def find_ship(ship_type)
