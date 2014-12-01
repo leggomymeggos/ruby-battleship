@@ -22,4 +22,12 @@ describe "Ship" do
     expect(cruiser.name).to eq("Cruiser")
     expect(destroyer.name).to eq("Destroyer")
   end
+
+  it 'has an abbreviated character' do
+    expect(aircraft_carrier.abbr).to eq("A")
+    expect(battleship.abbr).to eq("B")
+    expect(submarine.abbr).to eq("S")
+    expect(cruiser.abbr).to eq("C")
+    expect(destroyer.abbr).to eq("D")
+  end
 end
