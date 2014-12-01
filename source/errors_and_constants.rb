@@ -67,3 +67,9 @@ module CoordConstants
    [2, 3]
   end
 end
+
+module BoardConstants
+  def self.blank_space
+    "o"
+  end
+end

@@ -1,6 +1,9 @@
 require_relative 'errors_and_constants.rb'
 
+
 class Board
+  include BoardConstants
+
   BOARD_LENGTH = 10
   TOP_LABEL = ('A'..'Z').to_a.first(BOARD_LENGTH).unshift("  ")
 
@@ -34,7 +37,7 @@ class Board
 
   def set_board
     new_board = []
-    BOARD_LENGTH.times { new_board << Array.new(BOARD_LENGTH, "o") }
+    BOARD_LENGTH.times { new_board << Array.new(BOARD_LENGTH, BoardConstants.blank_space) }
     new_board
   end
 end
@@ -75,12 +78,12 @@ class Ship
   def set_ship(ship_hopeful)
     @ship ||= ShipConstants.ship_hash[ship_hopeful]
   end
-
 end
 
 class Game
   include ShipConstants
   include CoordConstants
+  include BoardConstants
 
   DIRECTIONS = ["horizontal", "vertical"]
 
@@ -107,6 +110,9 @@ class Game
     ship = find_ship(ship_type)
     raise ShipError, ShipError.already_placed if ship.placed == true
     
+    #####################
+    # BEGIN SMELLY CODE #
+
     starting_position = get_coord(coord)
     horz_coord = starting_position[0]
     vert_coord = starting_position[1]
@@ -128,12 +134,33 @@ class Game
         vert_coord += 1
       end
     end
+   
+
+    # END SMELLY CODE   #
+    #####################
 
     ship.placed = true
 
   end
 
   private
+
+  def room_for_ship?(horz_coord, vert_coord)
+    empty_row?(vert_coord) && empty_column?(horz_coord)
+
+  end
+
+  def empty_row?(coord)
+    board[coord - 1].all? { |space| space == BoardConstants.blank_space }
+  end
+
+  def empty_column?(coord)
+    board.all? { |space| space[coord] == BoardConstants.blank_space }
+  end
+
+  def row(coord)
+    board[coord]
+  end
 
   def find_ship(ship_type)
     raise ShipError, ShipError.unknown_ship unless ShipConstants.acceptable_ships.include? ship_type
