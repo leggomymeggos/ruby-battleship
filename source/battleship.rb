@@ -104,7 +104,7 @@ class Game
 
 
   def find_room(coords, ship, direction)
-    get_valid_start(coords, direction, ship)
+    get_valid_start(coords, ship, direction)
   end
 
   def ship_fits_on_board?(coords, ship, direction)
@@ -130,23 +130,21 @@ class Game
     coords
   end
 
-  def get_valid_start(coords, direction, ship)
+  def get_valid_start(coords, ship, direction)
     if ship_fits_on_board?(coords, ship, direction) && room_for_ship?(coords, ship, direction)
       return coords
     end
 
     new_coords = get_coords(random_coord)
-    get_valid_start(new_coords, direction, ship)
+    get_valid_start(new_coords, ship, direction)
   end
 
   def auto_populate_board
     ships.each do |ship| 
-      direction = random_direction
-      
       next if ship.placed == true
       
+      direction = random_direction
       coords = get_valid_start_coords(ship, direction)
-          
       strung_coords = stringify_coords(coords)
       
       place_ship(ship.name, strung_coords, direction)
@@ -195,23 +193,10 @@ class Game
     found
   end
 
-  def set_board
-    @board ||= Board.new
-  end
-
-  def ships_init
-    @ships = []
-    ShipConstants.acceptable_ships.each do |ship|
-      @ships << Ship.new(ship)
-    end
-    @ships
-  end
-
   def get_coords(coord)
     raise InvalidCoordinateError, InvalidCoordinateError.standard(coord) unless coord.match(/\A[a-jA-J]\d{1,2}\z/) # e.g. "B5"; "C10"
 
     coord_arr = []
-
     if coord.length == CoordConstants.acceptable_coord_lengths[-1]
       coord_arr << convert_from_letter(coord[0])
       coord_arr << convert_to_index(coord[1..2])
@@ -220,7 +205,6 @@ class Game
       coord_arr << convert_from_letter(coord[0])
       coord_arr << convert_to_index(coord[1])
     end
-
     coord_arr
   end
 
@@ -246,6 +230,18 @@ class Game
     else
       raise InvalidCoordinateError, InvalidCoordinateError.not_on_board
     end
+  end
+
+  def set_board
+    @board ||= Board.new
+  end
+
+  def ships_init
+    @ships = []
+    ShipConstants.acceptable_ships.each do |ship|
+      @ships << Ship.new(ship)
+    end
+    @ships
   end
 end
 
