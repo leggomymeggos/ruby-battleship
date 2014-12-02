@@ -85,6 +85,8 @@ class Game
   include BoardConstants
 
   DIRECTIONS = ["horizontal", "vertical"]
+  HIT = "/"
+  MISS = "o"
 
   def initialize
     @board = set_board
@@ -103,13 +105,58 @@ class Game
     @board.render
   end
 
+  def shoot(coord)
+    coord = get_coords(coord)
+    x = coord[1]
+    y = coord[0]
+    if hit?(coord)
+      board[x][y] = HIT
+    else
+      board[x][y] = MISS
+    end
+  end
+
+  def stringify_coords(coords)
+    horz_coord = coords[0] + 1
+    vert_coord = coords[1] + 1
+
+    Board::TOP_LABEL[horz_coord] + vert_coord.to_s
+  end
+
+  def get_valid_start_coords(ship, direction)
+    coords = get_coords(random_coord)
+    horz_coord = coords[0]
+    vert_coord = coords[1]
+
+    if !room_for_ship?(coords, ship, direction)
+      new_coords = get_valid_start(coords, direction, ship)
+    end
+    [horz_coord, vert_coord]
+  end
+
+  def auto_populate_board
+    direction = random_direction
+    ships.each do |ship| 
+      next if ship.placed == true
+      coords = get_valid_start_coords(ship, direction)
+      strung_coords = stringify_coords(coords)
+      place_ship(ship.name, strung_coords, direction)
+    end
+  end
+
+  def populate_board
+    until ships.all? { |ship| ship.placed == true }
+      auto_populate_board
+    end
+  end
+
   def place_ship(ship_type, coord, direction)
     raise InvalidDirectionError, InvalidDirectionError.unknown_direction unless DIRECTIONS.include? direction
 
     ship = find_ship(ship_type)
     raise ShipError, ShipError.already_placed if ship.placed == true
 
-    starting_position = get_coord(coord)
+    starting_position = get_coords(coord)
     raise ShipError, ShipError.space_taken unless room_for_ship?(starting_position, ship, direction)
     
     #####################
@@ -120,6 +167,7 @@ class Game
 
     
     if direction == "horizontal" && valid_start?(horz_coord, ship)
+
       ending = horz_coord + (ship.length - 1)
 
       until horz_coord > ending
@@ -128,8 +176,9 @@ class Game
       end
 
     elsif direction == "vertical" && valid_start?(vert_coord, ship)
-      ending = vert_coord + (ship.length - 1)
 
+      ending = vert_coord + (ship.length - 1)
+      
       until vert_coord > ending
         board[vert_coord][horz_coord] = ship.abbr
         vert_coord += 1
@@ -145,6 +194,30 @@ class Game
   end
 
   private
+
+  def random_coord
+    alpha = (Board::TOP_LABEL[1..board.length]).sample
+    num = (1..board.length).to_a.sample
+    puts alpha + num.to_s
+    alpha + num.to_s # => "A1"
+  end
+
+  def random_direction
+    way_to_go = DIRECTIONS.sample
+    puts way_to_go
+    way_to_go
+  end
+
+  def hit?(coord)
+    !empty_space?(coord)
+  end
+
+  def empty_space?(coord) # => [0, 0]
+    x = coord[1]
+    y = coord[0]
+
+    board[x][y] == BoardConstants.blank_space
+  end
 
   def room_for_ship?(coords, ship, direction)
     vert_coord = coords[1]
@@ -163,6 +236,10 @@ class Game
     end
   end
 
+  def valid_start?(coord, ship)
+    (coord + ship.length) < 10
+  end
+
   def row(coord)
     board[coord]
   end
@@ -177,14 +254,30 @@ class Game
     col
   end
 
+  def get_valid_start(coords, direction, ship)
+    if room_for_ship?(coords, ship, direction)
+      coords
+    end
+
+    horz_coord = coords[0]
+    vert_coord = coords[1]
+
+    if direction == "horizontal"
+      horz_coord = board.length - ship.length
+    else
+      vert_coord = board.length - ship.length
+    end
+
+    new_coords = [horz_coord, vert_coord]
+    puts "Old coordinates: #{coords}"
+    puts "New coordinates: #{new_coords}"
+    get_valid_start(new_coords, direction, ship)
+  end
+
   def find_ship(ship_type)
     raise ShipError, ShipError.unknown_ship unless ShipConstants.acceptable_ships.include? ship_type
     found = ships.select { |ship| ship.name == ship_type }[0]
     found
-  end
-
-  def valid_start?(coord, ship)
-    (coord + ship.length) < 9
   end
 
   def set_board
@@ -199,8 +292,8 @@ class Game
     @ships
   end
 
-  def get_coord(coord)
-    raise InvalidCoordinateError, InvalidCoordinateError.standard unless coord.match(/\A[a-jA-J]\d{1,2}\z/) # e.g. "B5"; "C10"
+  def get_coords(coord)
+    raise InvalidCoordinateError, InvalidCoordinateError.standard(coord) unless coord.match(/\A[a-jA-J]\d{1,2}\z/) # e.g. "B5"; "C10"
 
     coord_arr = []
 

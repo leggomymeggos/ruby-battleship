@@ -3,8 +3,8 @@ class InvalidCoordinateError < StandardError
     "That is not on the board!"
   end
 
-  def self.standard
-    "That is an invalid coordinate. Please enter a coordinate in this format: \"A10\"" 
+  def self.standard(coord)
+    "#{coord} is an invalid coordinate. Please enter a coordinate in this format: \"A10\"" 
   end
 
   def self.invalid_start
@@ -74,6 +74,6 @@ end
 
 module BoardConstants
   def self.blank_space
-    "o"
+    "+"
   end
 end
