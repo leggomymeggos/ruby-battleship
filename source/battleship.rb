@@ -38,9 +38,17 @@ class Game
   end
 
   def populate_board
-    until ships.all? { |ship| ship.placed == true }
-      auto_populate_board
+    ships.each do |ship| 
+      next if ship.placed
+      direction = random_direction
+
+      coords = get_valid_start(ship, direction)
+      
+      strung_coords = stringify_coords(coords)
+      
+      place_ship(ship.name, strung_coords, direction)
     end
+    return self
   end
 
   def place_ship(ship_type, coords, direction)
@@ -54,14 +62,13 @@ class Game
     
     #####################
     # BEGIN SMELLY CODE #
-
     horz_coord = starting_position[0]
     vert_coord = starting_position[1]
 
     
     if ship_fits_on_board?(starting_position, ship, direction)
       if direction == "horizontal"
-        ending = horz_coord + (ship.length - 1)
+        ending = check_ship_length(horz_coord, ship.length)
 
         until horz_coord > ending
           board[vert_coord][horz_coord] = ship.abbr
@@ -69,8 +76,7 @@ class Game
         end
 
       elsif direction == "vertical"
-
-        ending = vert_coord + (ship.length - 1)
+        ending = check_ship_length(vert_coord, ship.length)
         
         until vert_coord > ending
           board[vert_coord][horz_coord] = ship.abbr
@@ -82,10 +88,43 @@ class Game
     #####################
 
     ship.placed = true
-
   end
 
   private
+
+  def hit?(coord)
+    !empty_space?(coord)
+  end
+
+  def empty_space?(coord) # => [0, 0]
+    x = coord[1]
+    y = coord[0]
+
+    board[x][y] == BoardConstants.blank_space
+  end
+
+  def random_direction
+    DIRECTIONS.sample
+  end
+
+  def random_coord
+    alpha = (Board::TOP_LABEL[1..board.length]).sample
+    num = (1..board.length).to_a.sample
+    
+    alpha + num.to_s # => "A1"
+  end
+
+  def get_valid_start(coords=nil, ship, direction)
+    coords = get_coords(random_coord) if coords.nil?
+    return coords if valid_placement?(coords, ship, direction)
+
+    new_coords = get_coords(random_coord)
+    get_valid_start(new_coords, ship, direction)
+  end
+
+  def valid_placement?(coords,ship,direction)
+    ship_fits_on_board?(coords, ship, direction) && room_for_ship?(coords, ship, direction)
+  end
 
   def room_for_ship?(coords, ship, direction)
     horz_coord = coords[0]
@@ -102,11 +141,6 @@ class Game
     end
   end
 
-
-  def find_room(coords, ship, direction)
-    get_valid_start(coords, ship, direction)
-  end
-
   def ship_fits_on_board?(coords, ship, direction)
     checker = 0
     if direction == "horizontal"
@@ -115,62 +149,6 @@ class Game
       checker = check_ship_length(coords[1], ship.length)
     end
     checker < 10
-  end
-
-  def check_ship_length(start, ship_length) 
-    start + (ship_length - 1) # so that the first space on the ship overlaps the start
-  end
-
-  def get_valid_start_coords(ship, direction)
-    coords = get_coords(random_coord)
-
-    if !ship_fits_on_board?(coords, ship, direction) || !room_for_ship?(coords, ship, direction)
-      return find_room(coords, ship, direction)
-    end
-    coords
-  end
-
-  def get_valid_start(coords, ship, direction)
-    if ship_fits_on_board?(coords, ship, direction) && room_for_ship?(coords, ship, direction)
-      return coords
-    end
-
-    new_coords = get_coords(random_coord)
-    get_valid_start(new_coords, ship, direction)
-  end
-
-  def auto_populate_board
-    ships.each do |ship| 
-      next if ship.placed == true
-      
-      direction = random_direction
-      coords = get_valid_start_coords(ship, direction)
-      strung_coords = stringify_coords(coords)
-      
-      place_ship(ship.name, strung_coords, direction)
-    end
-  end
-
-  def random_coord
-    alpha = (Board::TOP_LABEL[1..board.length]).sample
-    num = (1..board.length).to_a.sample
-    
-    alpha + num.to_s # => "A1"
-  end
-
-  def random_direction
-    DIRECTIONS.sample
-  end
-
-  def hit?(coord)
-    !empty_space?(coord)
-  end
-
-  def empty_space?(coord) # => [0, 0]
-    x = coord[1]
-    y = coord[0]
-
-    board[x][y] == BoardConstants.blank_space
   end
 
   def row(coord)
@@ -189,8 +167,7 @@ class Game
 
   def find_ship(ship_type)
     raise ShipError, ShipError.unknown_ship unless ShipConstants.acceptable_ships.include? ship_type
-    found = ships.select { |ship| ship.name == ship_type }[0]
-    found
+    ships.select { |ship| ship.name == ship_type }[0]
   end
 
   def get_coords(coord)
@@ -242,6 +219,10 @@ class Game
       @ships << Ship.new(ship)
     end
     @ships
+  end
+
+  def check_ship_length(start, ship_length) 
+    start + (ship_length - 1) # so that the first space on the ship overlaps the start
   end
 end
 
