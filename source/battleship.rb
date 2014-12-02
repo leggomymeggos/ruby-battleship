@@ -78,8 +78,6 @@ class Game
         end
       end
     end
-   
-
     # END SMELLY CODE   #
     #####################
 
@@ -106,9 +104,7 @@ class Game
 
 
   def find_room(coords, ship, direction)
-    new_coords = get_valid_start(coords, direction, ship)
-    puts "Now I am trying to place #{ship.name} at: #{new_coords}"
-    return new_coords
+    get_valid_start(coords, direction, ship)
   end
 
   def ship_fits_on_board?(coords, ship, direction)
@@ -127,7 +123,6 @@ class Game
 
   def get_valid_start_coords(ship, direction)
     coords = get_coords(random_coord)
-    puts "I am trying to place #{ship.name} at: #{coords}"
 
     if !ship_fits_on_board?(coords, ship, direction) || !room_for_ship?(coords, ship, direction)
       return find_room(coords, ship, direction)
@@ -137,7 +132,6 @@ class Game
 
   def get_valid_start(coords, direction, ship)
     if ship_fits_on_board?(coords, ship, direction) && room_for_ship?(coords, ship, direction)
-      puts coords.inspect
       return coords
     end
 
@@ -162,14 +156,12 @@ class Game
   def random_coord
     alpha = (Board::TOP_LABEL[1..board.length]).sample
     num = (1..board.length).to_a.sample
-    puts alpha + num.to_s
+    
     alpha + num.to_s # => "A1"
   end
 
   def random_direction
-    way_to_go = DIRECTIONS.sample
-    puts way_to_go
-    way_to_go
+    DIRECTIONS.sample
   end
 
   def hit?(coord)
