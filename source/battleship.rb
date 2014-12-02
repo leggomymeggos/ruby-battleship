@@ -116,47 +116,19 @@ class Game
     end
   end
 
-  def stringify_coords(coords)
-    horz_coord = coords[0] + 1
-    vert_coord = coords[1] + 1
-
-    Board::TOP_LABEL[horz_coord] + vert_coord.to_s
-  end
-
-  def get_valid_start_coords(ship, direction)
-    coords = get_coords(random_coord)
-    horz_coord = coords[0]
-    vert_coord = coords[1]
-
-    if !room_for_ship?(coords, ship, direction)
-      new_coords = get_valid_start(coords, direction, ship)
-    end
-    [horz_coord, vert_coord]
-  end
-
-  def auto_populate_board
-    direction = random_direction
-    ships.each do |ship| 
-      next if ship.placed == true
-      coords = get_valid_start_coords(ship, direction)
-      strung_coords = stringify_coords(coords)
-      place_ship(ship.name, strung_coords, direction)
-    end
-  end
-
   def populate_board
     until ships.all? { |ship| ship.placed == true }
       auto_populate_board
     end
   end
 
-  def place_ship(ship_type, coord, direction)
+  def place_ship(ship_type, coords, direction)
     raise InvalidDirectionError, InvalidDirectionError.unknown_direction unless DIRECTIONS.include? direction
 
     ship = find_ship(ship_type)
     raise ShipError, ShipError.already_placed if ship.placed == true
 
-    starting_position = get_coords(coord)
+    starting_position = get_coords(coords)
     raise ShipError, ShipError.space_taken unless room_for_ship?(starting_position, ship, direction)
     
     #####################
@@ -166,22 +138,23 @@ class Game
     vert_coord = starting_position[1]
 
     
-    if direction == "horizontal" && valid_start?(horz_coord, ship)
+    if ship_fits_on_board?(starting_position, ship, direction)
+      if direction == "horizontal"
+        ending = horz_coord + (ship.length - 1)
 
-      ending = horz_coord + (ship.length - 1)
+        until horz_coord > ending
+          board[vert_coord][horz_coord] = ship.abbr
+          horz_coord += 1
+        end
 
-      until horz_coord > ending
-        board[vert_coord][horz_coord] = ship.abbr
-        horz_coord += 1
-      end
+      elsif direction == "vertical"
 
-    elsif direction == "vertical" && valid_start?(vert_coord, ship)
-
-      ending = vert_coord + (ship.length - 1)
-      
-      until vert_coord > ending
-        board[vert_coord][horz_coord] = ship.abbr
-        vert_coord += 1
+        ending = vert_coord + (ship.length - 1)
+        
+        until vert_coord > ending
+          board[vert_coord][horz_coord] = ship.abbr
+          vert_coord += 1
+        end
       end
     end
    
@@ -194,6 +167,76 @@ class Game
   end
 
   private
+
+  def room_for_ship?(coords, ship, direction)
+    horz_coord = coords[0]
+    vert_coord = coords[1]
+    
+    if direction == "horizontal"
+      current_row = row(vert_coord)
+      ending = check_ship_length(horz_coord, ship.length)
+      return current_row[horz_coord..ending].all? { |space| space == BoardConstants.blank_space }
+    else
+      current_column = column(horz_coord)
+      ending = check_ship_length(vert_coord, ship.length)
+      return current_column[vert_coord..ending].all? { |space| space == BoardConstants.blank_space }
+    end
+  end
+
+
+  def find_room(coords, ship, direction)
+    new_coords = get_valid_start(coords, direction, ship)
+    puts "Now I am trying to place #{ship.name} at: #{new_coords}"
+    return new_coords
+  end
+
+  def ship_fits_on_board?(coords, ship, direction)
+    checker = 0
+    if direction == "horizontal"
+      checker = check_ship_length(coords[0], ship.length)
+    elsif direction == "vertical"
+      checker = check_ship_length(coords[1], ship.length)
+    end
+    checker < 10
+  end
+
+  def check_ship_length(start, ship_length) 
+    start + (ship_length - 1) # so that the first space on the ship overlaps the start
+  end
+
+  def get_valid_start_coords(ship, direction)
+    coords = get_coords(random_coord)
+    puts "I am trying to place #{ship.name} at: #{coords}"
+
+    if !ship_fits_on_board?(coords, ship, direction) || !room_for_ship?(coords, ship, direction)
+      return find_room(coords, ship, direction)
+    end
+    coords
+  end
+
+  def get_valid_start(coords, direction, ship)
+    if ship_fits_on_board?(coords, ship, direction) && room_for_ship?(coords, ship, direction)
+      puts coords.inspect
+      return coords
+    end
+
+    new_coords = get_coords(random_coord)
+    get_valid_start(new_coords, direction, ship)
+  end
+
+  def auto_populate_board
+    ships.each do |ship| 
+      direction = random_direction
+      
+      next if ship.placed == true
+      
+      coords = get_valid_start_coords(ship, direction)
+          
+      strung_coords = stringify_coords(coords)
+      
+      place_ship(ship.name, strung_coords, direction)
+    end
+  end
 
   def random_coord
     alpha = (Board::TOP_LABEL[1..board.length]).sample
@@ -219,27 +262,6 @@ class Game
     board[x][y] == BoardConstants.blank_space
   end
 
-  def room_for_ship?(coords, ship, direction)
-    vert_coord = coords[1]
-    horz_coord = coords[0]
-    
-    if direction == "horizontal"
-      current_row = row(vert_coord)
-      ending = ((ship.length - 1) + horz_coord)
-      
-      return current_row[horz_coord..ending].all? { |space| space == BoardConstants.blank_space }
-    else
-      current_column = column(horz_coord)
-      ending = ((ship.length - 1) + vert_coord)
-
-      return current_column[vert_coord..ending].all? { |space| space == BoardConstants.blank_space }
-    end
-  end
-
-  def valid_start?(coord, ship)
-    (coord + ship.length) < 10
-  end
-
   def row(coord)
     board[coord]
   end
@@ -252,26 +274,6 @@ class Game
       index += 1
     end
     col
-  end
-
-  def get_valid_start(coords, direction, ship)
-    if room_for_ship?(coords, ship, direction)
-      coords
-    end
-
-    horz_coord = coords[0]
-    vert_coord = coords[1]
-
-    if direction == "horizontal"
-      horz_coord = board.length - ship.length
-    else
-      vert_coord = board.length - ship.length
-    end
-
-    new_coords = [horz_coord, vert_coord]
-    puts "Old coordinates: #{coords}"
-    puts "New coordinates: #{new_coords}"
-    get_valid_start(new_coords, direction, ship)
   end
 
   def find_ship(ship_type)
@@ -307,6 +309,13 @@ class Game
     end
 
     coord_arr
+  end
+
+  def stringify_coords(coords)
+    horz_coord = coords[0] + 1
+    vert_coord = coords[1] + 1
+
+    Board::TOP_LABEL[horz_coord] + vert_coord.to_s
   end
 
   def convert_from_letter(coord)
