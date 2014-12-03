@@ -78,6 +78,15 @@ describe 'Game' do
     end
   end
 
+  describe '#shoot' do
+    before(:each){ game.populate_board }
+
+    it 'updates the board to reflect a hit or miss' do
+      game.shoot("C1")
+      expect( game.board[0][2] ).not_to include( BoardConstants.blank_space )
+    end
+  end
+
   describe '#row' do
     it 'is a private method' do
       expect{ game.row(3) }.to raise_error( NoMethodError )
