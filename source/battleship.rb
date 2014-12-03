@@ -60,10 +60,8 @@ class Game
     starting_position = get_coords(coords)
     raise ShipError, ShipError.space_taken unless room_for_ship?(starting_position, ship, direction)
     
-    #####################
-    # BEGIN SMELLY CODE #
-    horz_coord = starting_position[0]
-    vert_coord = starting_position[1]
+    horz_coord = starting_position.first
+    vert_coord = starting_position.last
 
     
     if ship_fits_on_board?(starting_position, ship, direction)
@@ -84,16 +82,18 @@ class Game
         end
       end
     end
-    # END SMELLY CODE   #
-    #####################
-
+    
     ship.placed = true
   end
 
   private
 
   def hit?(coord)
-    !empty_space?(coord)
+    !empty_space?(coord) && space_at(coord) != MISS
+  end
+
+  def space_at(coords)
+    board[coords.last][coords.first]
   end
 
   def empty_space?(coord) # => [0, 0]
