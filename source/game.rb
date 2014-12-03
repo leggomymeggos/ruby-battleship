@@ -7,7 +7,7 @@ class Game
   include BoardConstants
 
   DIRECTIONS = ["horizontal", "vertical"]
-  HIT = "/".colorize(:light_green)
+  HIT = "/".colorize(:light_magenta)
   MISS = "o".colorize(:light_blue)
 
   def initialize
