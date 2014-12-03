@@ -1,4 +1,4 @@
-require_relative 'board_and_ship.rb'
+require_relative 'board_and_ship'
 
 class Game
   include ShipConstants
@@ -24,6 +24,10 @@ class Game
 
   def to_s
     @board.render
+  end
+
+  def finished?
+    started? && no_more_ships
   end
 
   def shoot(coord)
@@ -224,6 +228,40 @@ class Game
   def check_ship_length(start, ship_length) 
     start + (ship_length - 1) # so that the first space on the ship overlaps the start
   end
+  
+  def started?
+    board.flatten.include?(HIT) || board.flatten.include?(MISS)
+  end
+
+  def no_more_ships
+    sunk_aircraft && sunk_battleship && sunk_submarine && sunk_cruiser && sunk_destroyer
+  end
+
+  def sunk_aircraft
+    ship = find_ship("Aircraft carrier")
+    !board.flatten.include?(ship.abbr)
+  end
+
+  def sunk_battleship
+    ship = find_ship("Battleship")
+    !board.flatten.include?(ship.abbr)
+  end
+
+  def sunk_submarine
+    ship = find_ship("Submarine")
+    !board.flatten.include?(ship.abbr)
+  end
+
+  def sunk_cruiser
+    ship = find_ship("Cruiser")
+    !board.flatten.include?(ship.abbr)
+  end
+
+  def sunk_destroyer
+    ship = find_ship("Destroyer")
+    !board.flatten.include?(ship.abbr)
+  end
+
 end
 
 
