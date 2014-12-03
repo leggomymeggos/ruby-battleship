@@ -1,3 +1,5 @@
+require 'colorize'
+
 class InvalidCoordinateError < StandardError
   def self.not_on_board
     "That is not on the board!"
@@ -46,11 +48,11 @@ end
 
 module ShipConstants
   def self.ship_hash
-    { "Aircraft carrier" => { abbr: "A", length: 5, name: "Aircraft carrier", placed: false }, 
-      "Battleship"       => { abbr: "B", length: 4, name: "Battleship", placed: false },
-      "Submarine"        => { abbr: "S", length: 3, name: "Submarine", placed: false },
-      "Cruiser"          => { abbr: "C", length: 3, name: "Cruiser", placed: false },
-      "Destroyer"        => { abbr: "D", length: 2, name: "Destroyer", placed: false }
+    { "Aircraft carrier" => { abbr: "A".colorize(:light_white), length: 5, name: "Aircraft carrier", placed: false }, 
+      "Battleship"       => { abbr: "B".colorize(:light_white), length: 4, name: "Battleship", placed: false },
+      "Submarine"        => { abbr: "S".colorize(:light_white), length: 3, name: "Submarine", placed: false },
+      "Cruiser"          => { abbr: "C".colorize(:light_white), length: 3, name: "Cruiser", placed: false },
+      "Destroyer"        => { abbr: "D".colorize(:light_white), length: 2, name: "Destroyer", placed: false }
     }
   end
 
@@ -80,6 +82,6 @@ end
 
 module BoardConstants
   def self.blank_space
-    "+"
+    "+".colorize(:cyan)
   end
 end

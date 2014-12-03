@@ -7,8 +7,8 @@ class Game
   include BoardConstants
 
   DIRECTIONS = ["horizontal", "vertical"]
-  HIT = "/"
-  MISS = "o"
+  HIT = "/".colorize(:light_green)
+  MISS = "o".colorize(:light_blue)
 
   def initialize
     @board = set_board
@@ -266,7 +266,6 @@ class Game
     ship = find_ship("Destroyer")
     !board.flatten.include?(ship.abbr)
   end
-
 end
 
 

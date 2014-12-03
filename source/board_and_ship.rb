@@ -17,17 +17,15 @@ class Board
   def render
     rendered_board = []
     first_row = TOP_LABEL
-    breaker = "--" * first_row.length
     
-    rendered_board << first_row.join("|")
-    rendered_board << breaker
+    rendered_board << first_row.join(" ").colorize(:yellow)
     
     board.each.with_index(1) do |row, index|
       num = index.to_s
       if num.length == 1
-        num = " " + num  
+        num = " " + num
       end
-      rendered_board << (num += "|") + row.join("|")
+      rendered_board << (num.colorize(:yellow) + " ") + row.join(" ")
     end
     rendered_board.join("\n")
   end

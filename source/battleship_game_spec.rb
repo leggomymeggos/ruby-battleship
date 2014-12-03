@@ -2,6 +2,11 @@ require_relative 'battleship.rb'
 
 describe 'Game' do
   let(:game){ Game.new }
+  let(:ac){ Ship.new("Aircraft carrier") }
+  let(:bs){ Ship.new("Battleship") }
+  let(:sub){ Ship.new("Submarine") }
+  let(:cr){ Ship.new("Cruiser") }
+  let(:dtr){ Ship.new("Destroyer") }
 
   it 'creates a board on initialization' do
     expect(game.board).not_to be nil
@@ -24,7 +29,7 @@ describe 'Game' do
     end
 
     it 'updates the board with ships' do
-      expect( game.board.flatten ).to include("A", "B", "C", "D", "S")
+      expect( game.board.flatten ).to include(ac.abbr, bs.abbr, sub.abbr, cr.abbr, dtr.abbr)
     end
 
     it 'doesn\'t try to place ships on top of one another, populate with an invalid coordinate, or choose an invalid direction' do
