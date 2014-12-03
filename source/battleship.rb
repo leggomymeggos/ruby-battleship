@@ -28,8 +28,8 @@ class Game
 
   def shoot(coord)
     coord = get_coords(coord)
-    x = coord[1]
-    y = coord[0]
+    x = coord.last
+    y = coord.first
     if hit?(coord)
       board[x][y] = HIT
     else
@@ -92,15 +92,15 @@ class Game
     !empty_space?(coord) && space_at(coord) != MISS
   end
 
-  def space_at(coords)
-    board[coords.last][coords.first]
-  end
-
   def empty_space?(coord) # => [0, 0]
     x = coord[1]
     y = coord[0]
 
     board[x][y] == BoardConstants.blank_space
+  end
+
+  def space_at(coords)
+    board[coords.last][coords.first]
   end
 
   def random_direction
