@@ -81,9 +81,9 @@ class Game
           vert_coord += 1
         end
       end
+      ship.placed = true
     end
     
-    ship.placed = true
   end
 
   private
