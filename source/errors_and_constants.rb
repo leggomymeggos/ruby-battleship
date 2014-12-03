@@ -32,6 +32,12 @@ class ShipError < StandardError
   end
 end
 
+class GameError < StandardError
+  def self.dont_shoot
+    "Where are you aiming? Try populating the board with ships."
+  end
+end
+
 class UpdateError < StandardError
   def self.standard
     "That cannot be updated in that way."
