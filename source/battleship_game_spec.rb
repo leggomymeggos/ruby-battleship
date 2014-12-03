@@ -139,7 +139,17 @@ describe 'Game' do
     end
 
     it 'converts letter coordinates into numbered coordinates' do
-      expect( game.send(:get_coords, "A1") ).to eq([0, 0])
+      expect( game.send(:get_coords, "E8") ).to eq([4, 7])
+    end
+  end
+
+  describe '#stringify_coords' do
+    it 'is a private method' do
+      expect{ game.stringify_coords[0, 0] }.to raise_error( NoMethodError )
+    end
+
+    it 'converts numbered coordinates into letter coordinates' do
+      expect( game.send(:stringify_coords, [9, 1]) ).to eq("J2")
     end
   end
 end
