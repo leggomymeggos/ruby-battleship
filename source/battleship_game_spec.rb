@@ -1,6 +1,5 @@
 require_relative 'battleship.rb'
 
-
 describe 'Game' do
   let(:game){ Game.new }
 
@@ -79,11 +78,15 @@ describe 'Game' do
   end
 
   describe '#shoot' do
-    before(:each){ game.populate_board }
+    before(:each){ |test| game.populate_board unless test.metadata[:broken] }
 
     it 'updates the board to reflect a hit or miss' do
       game.shoot("C1")
       expect( game.board[0][2] ).not_to include( BoardConstants.blank_space )
+    end
+
+    it 'doesn\'t let the user fire at a board when the game hasn\'t been started', broken: true do
+      expect{ game.shoot("C1") }.to raise_error( GameError )
     end
   end
 

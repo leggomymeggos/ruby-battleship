@@ -1,4 +1,5 @@
-require_relative 'board_and_ship'
+require_relative 'board_and_ship.rb'
+
 
 class Game
   include ShipConstants
@@ -31,6 +32,8 @@ class Game
   end
 
   def shoot(coord)
+    raise GameError, GameError.dont_shoot unless started?
+
     coord = get_coords(coord)
     x = coord.last
     y = coord.first
@@ -228,9 +231,11 @@ class Game
   def check_ship_length(start, ship_length) 
     start + (ship_length - 1) # so that the first space on the ship overlaps the start
   end
-  
+
+  # Gameplay
+
   def started?
-    board.flatten.include?(HIT) || board.flatten.include?(MISS)
+    ships.all? { |ship| ship.placed }
   end
 
   def no_more_ships
