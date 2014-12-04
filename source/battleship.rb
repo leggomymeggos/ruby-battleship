@@ -55,9 +55,14 @@ class Battleship
   def shoot_enemy(coord)
     enemy.shoot(coord)
     update_enemy_mock
+    shoot_home
   end
 
   private
+
+  def shoot_home
+    home.shoot(home.send(:random_coord))
+  end
 
   def enemy
     @enemy ||= Game.new
