@@ -21,11 +21,7 @@ welcome
   end
 
   def self.prompt
-    "::>"
-  end
-
-  def self.populate_prompt
-    "Start by populating the board."
+    "::> "
   end
 
   def self.hit(ship_name)
