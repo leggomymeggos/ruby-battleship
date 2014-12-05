@@ -89,8 +89,11 @@ class Game
         end
       end
       ship.placed = true
-    end
-    
+    end    
+  end
+
+  def started?
+    ships.all? { |ship| ship.placed }
   end
 
   private
@@ -233,10 +236,6 @@ class Game
   end
 
   # Gameplay
-
-  def started?
-    ships.all? { |ship| ship.placed }
-  end
 
   def no_more_ships
     sunk_aircraft && sunk_battleship && sunk_submarine && sunk_cruiser && sunk_destroyer

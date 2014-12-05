@@ -20,6 +20,18 @@ class GameView
 welcome
   end
 
+  def self.ship_options
+    "Type \"A\" to let the computer place your ships. Type \"M\" to place them yourself."
+  end
+
+  def self.place_ship(ship_name)
+    "Pick a starting coordinate to place #{ship_name}."
+  end
+
+  def self.direction
+    "Pick a direction (either horizontal or vertical) to place the ship."
+  end
+
   def self.prompt
     "::> "
   end

@@ -2,19 +2,59 @@ require_relative 'battleship.rb'
 
 
 
-def run!
-  puts GameView.welcome
-  battle = Battleship.new
-  battle.start
-  puts battle
+class BattleshipController
+  def initialize
+    @battle = battle
+  end
 
-  until battle.finished?
-    print GameView.prompt
-    input = gets.chomp
-    battle.shoot_enemy(input)
+  def battle
+    @battle ||= Battleship.new
+  end
+
+  def start
+    puts GameView.welcome
+  end
+
+  def place_ships
+    puts GameView.ship_options
+    ships = gets.chomp
+
+    if ships == "M"
+      battle.home.ships.each do |ship|
+        puts battle.home
+        puts GameView.place_ship(ship.name)
+        print GameView.prompt
+        ship_start = gets.chomp
+        puts GameView.direction
+        print GameView.prompt
+        ship_direction = gets.chomp
+        battle.home.place_ship(ship.name, ship_start, ship_direction)
+      end
+    end
+  end
+  
+  def run!
+    self.start
+    place_ships
+
+    battle.start
     puts battle
+
+    until battle.finished?
+      print GameView.prompt
+      input = gets.chomp
+      if battle.hit?(battle.shoot_enemy(input))
+        puts GameView.hit
+      else
+        puts GameView.miss
+      end
+      
+      battle.update_enemy_mock
+      battle.shoot_home
+      puts battle
+    end
   end
 end
 
-
-run!
+battleship = BattleshipController.new
+battleship.run!

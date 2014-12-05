@@ -52,17 +52,19 @@ class Battleship
     @winner
   end
 
-  def shoot_enemy(coord)
-    enemy.shoot(coord)
-    update_enemy_mock
-    shoot_home
+  def hit?(shot)
+    shot.include? "/"
   end
 
-  private
+  def shoot_enemy(coord)
+    enemy.shoot(coord)
+  end
 
   def shoot_home
     home.shoot(home.send(:random_coord))
   end
+
+  private
 
   def enemy
     @enemy ||= Game.new
