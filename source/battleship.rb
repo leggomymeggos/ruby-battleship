@@ -53,7 +53,11 @@ class Battleship
   end
 
   def hit?(shot)
-    shot.include? "/"
+    shot.include? Game::HIT
+  end
+
+  def miss?(shot)
+    shot.include? Game::MISS
   end
 
   def shoot_enemy(coord)
