@@ -28,7 +28,11 @@ describe "Battleship" do
   end
 
   describe '#shoot_enemy' do
-    before{ battle.start }
+    before(:each){ |test| battle.start unless test.metadata[:broken] }
+    it 'doesn\'t shoot if there are no ships on the board', broken: true do
+      expect{ battle.shoot_enemy("A2") }.to raise_error( GameError )
+    end
+
     it 'takes one argument' do
       expect( Battleship.instance_method(:shoot_enemy).arity ).to be 1
     end
@@ -36,9 +40,16 @@ describe "Battleship" do
     it 'raises an error if it is passed an invalid coordinate' do
       expect{ battle.shoot_enemy("90") }.to raise_error( InvalidCoordinateError )
     end
+  end
+
+  describe '#update_enemy_mock' do
+    before do
+      battle.start
+      battle.shoot_enemy("A2")
+    end
 
     it 'updates the enemy mock board to reflect the shot' do
-      expect{ battle.shoot_enemy("A1") }.to change{ battle.enemy_mock.render }
+      expect{ battle.update_enemy_mock }.to change{ battle.enemy_mock.render }
     end
   end
 

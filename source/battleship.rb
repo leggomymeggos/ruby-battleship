@@ -62,7 +62,6 @@ class Battleship
 
   def shoot_enemy(coord)
     enemy.shoot(coord)
-    update_enemy_mock
   end
 
   def shoot_home
