@@ -15,7 +15,7 @@ class GameView
 <<-welcome
 
               ************* Welcome to Battleship! **************
-                  the game where you don't get in trouble 
+                  the game where you don't get in trouble
                         for shooting at your friends
 
 Type "A" to let the computer place your ships. Type "M" to place them yourself.
@@ -42,7 +42,7 @@ welcome
   end
 
   def self.winner(winner)
-    "#{winner} wins!" 
+    "#{winner} wins!"
   end
 
   def self.sunk(ship_name)

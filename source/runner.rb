@@ -1,7 +1,5 @@
 require_relative 'battleship.rb'
 
-
-
 class BattleshipController
   def initialize
     @battle = battle
@@ -31,7 +29,7 @@ class BattleshipController
         print GameView.prompt
         ship_direction = gets.chomp
         
-        puts error_catch{ 
+        puts error_catch{
           battle.home.place_ship(ship.name, ship_start, ship_direction)
         }
       end
