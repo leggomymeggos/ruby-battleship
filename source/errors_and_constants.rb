@@ -1,4 +1,5 @@
 require 'colorize'
+require 'coveralls'
 
 class InvalidCoordinateError < StandardError
   def self.not_on_board
