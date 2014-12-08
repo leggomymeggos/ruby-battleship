@@ -52,8 +52,11 @@ class BattleshipController
       print GameView.prompt
       input = gets.chomp
     end
-    puts battle
-    puts GameView.winner(battle.winner)
+
+    if battle.winner
+      puts battle
+      puts GameView.winner(battle.winner)
+    end
   end
 
   def react(input)
@@ -67,7 +70,7 @@ class BattleshipController
     end
 
     sleep 0.5
-    
+    battle.update_enemy_mock
     battle.shoot_home
   end
 

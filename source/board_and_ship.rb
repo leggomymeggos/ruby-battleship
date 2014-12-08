@@ -41,7 +41,7 @@ end
 
 class Ship
   include ShipConstants
-                 
+
   attr_reader :ship
 
   def initialize(ship_hopeful)
