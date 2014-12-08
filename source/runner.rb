@@ -55,6 +55,7 @@ class BattleshipController
       input = gets.chomp
     end
     puts battle
+    puts GameView.winner(battle.winner)
   end
 
   def react(input)
@@ -69,7 +70,6 @@ class BattleshipController
 
     sleep 0.5
     
-    battle.update_enemy_mock
     battle.shoot_home
   end
 
