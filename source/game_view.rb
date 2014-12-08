@@ -41,6 +41,10 @@ welcome
     "A direct hit!"
   end
 
+  def self.winner(winner)
+    "#{winner} wins!" 
+  end
+
   def self.sunk(ship_name)
     "#{ship_name} has sunk!"
   end

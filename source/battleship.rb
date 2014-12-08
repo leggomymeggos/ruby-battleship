@@ -45,7 +45,7 @@ class Battleship
     if home.finished?
       @winner = "Computer"
     elsif enemy.finished?
-      @winner = "You"
+      @winner = "Human"
     else
       @winner = nil
     end
