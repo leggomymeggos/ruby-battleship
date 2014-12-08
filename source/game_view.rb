@@ -37,8 +37,8 @@ welcome
     "::> "
   end
 
-  def self.hit(ship_name)
-    "#{ship_name} was hit!"
+  def self.hit
+    "A direct hit!"
   end
 
   def self.sunk(ship_name)
