@@ -17,6 +17,7 @@ class BattleshipController
 
   def place_ships
     puts GameView.ship_options
+    print GameView.prompt
     ships = gets.chomp
 
     if ships == "M"
@@ -25,33 +26,58 @@ class BattleshipController
         puts GameView.place_ship(ship.name)
         print GameView.prompt
         ship_start = gets.chomp
+        
         puts GameView.direction
         print GameView.prompt
         ship_direction = gets.chomp
-        battle.home.place_ship(ship.name, ship_start, ship_direction)
+        
+        puts error_catch{ 
+          battle.home.place_ship(ship.name, ship_start, ship_direction)
+        }
       end
     end
   end
   
   def run!
+    input = ""
     self.start
     place_ships
 
     battle.start
     puts battle
-
-    until battle.finished?
+    
+    print GameView.prompt
+    input = gets.chomp
+    until battle.finished? || input == "exit" || input == "quit"
+      react(input)
+      puts battle
       print GameView.prompt
       input = gets.chomp
-      if battle.hit?(battle.shoot_enemy(input))
-        puts GameView.hit
-      else
-        puts GameView.miss
-      end
-      
-      battle.update_enemy_mock
-      battle.shoot_home
-      puts battle
+    end
+    puts battle
+  end
+
+  def react(input)
+    shot = error_catch{ battle.shoot_enemy(input) }
+    if battle.hit?(shot)
+      puts GameView.hit
+    elsif battle.miss?(shot)
+      puts GameView.miss
+    else
+      puts shot
+    end
+
+    sleep 0.5
+    
+    battle.update_enemy_mock
+    battle.shoot_home
+  end
+
+  def error_catch(&block)
+    begin
+      yield
+    rescue => e
+      return e.message if e.message
     end
   end
 end
