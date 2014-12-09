@@ -1,6 +1,5 @@
 require_relative 'board_and_ship.rb'
 
-
 class Game
   include ShipConstants
   include CoordConstants
