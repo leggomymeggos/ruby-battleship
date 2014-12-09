@@ -40,6 +40,12 @@ describe "Battleship" do
     it 'raises an error if it is passed an invalid coordinate' do
       expect{ battle.shoot_enemy("90") }.to raise_error( InvalidCoordinateError )
     end
+
+    it 'raises an error if it is passed a coordinate that has already been shot' do
+      coord = battle.home.send(:random_coord)
+      battle.shoot_enemy(coord)
+      expect{ battle.shoot_enemy(coord) }.to raise_error( GameError )
+    end
   end
 
   describe '#update_enemy_mock' do
