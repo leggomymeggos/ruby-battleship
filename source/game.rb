@@ -100,6 +100,13 @@ class Game
     ships.all? { |ship| ship.placed }
   end
 
+  def stringify_coords(coords)
+    horz_coord = coords[0] + 1
+    vert_coord = coords[1] + 1
+
+    Board::TOP_LABEL[horz_coord] + vert_coord.to_s
+  end
+
   private
 
   def hit?(coord)
@@ -197,13 +204,6 @@ class Game
       coord_arr << convert_to_index(coord[1])
     end
     coord_arr
-  end
-
-  def stringify_coords(coords)
-    horz_coord = coords[0] + 1
-    vert_coord = coords[1] + 1
-
-    Board::TOP_LABEL[horz_coord] + vert_coord.to_s
   end
 
   def convert_from_letter(coord)
