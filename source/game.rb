@@ -55,11 +55,8 @@ class Game
     ships.each do |ship| 
       next if ship.placed
       direction = random_direction
-
       coords = get_valid_start(ship, direction)
-      
       strung_coords = stringify_coords(coords)
-      
       place_ship(ship.name, strung_coords, direction)
     end
     return self
