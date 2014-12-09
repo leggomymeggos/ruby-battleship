@@ -15,13 +15,16 @@ class ComputerAI < Game
     x = coords.first
     y = coords.last
 
-    to_shoot << [x, y]
-    to_shoot << [x, (y - 1)]
-    to_shoot << [x, (y + 1)]
-    to_shoot << [(x - 1), y]
-    to_shoot << [(x + 1), y]
+    to_shoot << [x, (y - 1)] unless y == 0
+    to_shoot << [x, (y + 1)] unless y >= board.length
+    to_shoot << [(x - 1), y] unless x == 0
+    to_shoot << [(x + 1), y] unless x >= board.length
     
     to_shoot
+  end
+
+  def stringify_surrounding_coords(coord_collection)
+    coord_collection.map( |coord| stringify_coords(coord) )
   end
 
   def find_hits(coords)
