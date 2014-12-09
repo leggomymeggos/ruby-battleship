@@ -51,7 +51,8 @@ describe "Battleship" do
   describe '#update_enemy_mock' do
     before do
       battle.start
-      battle.shoot_enemy("A2")
+      coord = battle.home.send(:random_coord)
+      battle.shoot_enemy(coord)
     end
 
     it 'updates the enemy mock board to reflect the shot' do
