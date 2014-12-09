@@ -37,4 +37,8 @@ class EnemyAI < Game
   def already_tried?(coord)
     shot_coords.include? coord
   end
+
+  def get_next_coord?(board_value)
+    board_value == HIT
+  end
 end
