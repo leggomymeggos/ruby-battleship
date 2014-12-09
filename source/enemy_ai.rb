@@ -26,7 +26,7 @@ class EnemyAI < Game
 
   def find_hits(coords)
     hits_here = []
-    get_surrounding_coords(coords).each do |coord|
+    get_current_and_surrounding_coords(coords).each do |coord|
       if space_at(coord) == Game::HIT
         hits_here << coord
       end
