@@ -71,6 +71,8 @@ class ComputerAI < Game
 
   def new_valid_shots(shot)
     coord = get_coords(shot)
-    get_surrounding_coords(coord).select{ |shots| !already_tried? shots }
+    surrounding = get_surrounding_coords(coord)
+
+    stringify_surrounding_coords(surrounding).select{ |shots| !already_tried? shots }
   end
 end
