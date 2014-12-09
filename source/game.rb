@@ -13,6 +13,7 @@ class Game
   def initialize
     @board = set_board
     @ships = ships
+    @shot_coords = shot_coords
   end
 
   def board
@@ -21,6 +22,10 @@ class Game
 
   def ships
     @ships ||= ships_init
+  end
+
+  def shot_coords
+    @shot_coords ||= Array.new
   end
 
   def to_s
@@ -33,7 +38,9 @@ class Game
 
   def shoot(coord)
     raise GameError, GameError.dont_shoot unless started?
+    raise GameError, GameError.already_shot if shot_coords.include? coord
 
+    shot_coords << coord
     coord = get_coords(coord)
     x = coord.last
     y = coord.first
