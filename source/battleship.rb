@@ -7,6 +7,7 @@ class Battleship
     @home       = home
     @enemy      = enemy
     @enemy_mock = enemy_mock
+    @settings   = settings
   end
 
   def home
@@ -75,11 +76,15 @@ class Battleship
 
   private
 
-  def enemy(settings)
-    if settings == "hard"
-      @enemy ||= ComputerAI.new
+  def enemy
+    @enemy ||= which_enemy
+  end
+
+  def which_enemy
+    if @settings == "hard"
+      ComputerAI.new
     else
-      @enemy ||= Game.new
+      Game.new
     end
   end
 end
