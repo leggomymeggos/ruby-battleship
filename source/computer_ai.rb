@@ -66,7 +66,11 @@ class ComputerAI < Game
   end
 
   def repopulate_next_coord(shot)
+    @next_coord = new_valid_shots(shot)
+  end
+
+  def new_valid_shots(shot)
     coord = get_coords(shot)
-    @next_coord = find_hits(coord)
+    get_surrounding_coords(coord).select{ |shots| !already_tried? shots }
   end
 end
