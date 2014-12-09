@@ -1,6 +1,15 @@
 require_relative 'game'
 
 class EnemyAI < Game
+  def initialize
+    super
+    @next_coord = next_coord
+  end
+
+  def next_coord
+    @next_coord ||= Array.new
+  end
+
   def get_current_and_surrounding_coords(coords) # there has to be a better way to do this...
     to_shoot = []
     x = coords.first
