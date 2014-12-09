@@ -1,8 +1,9 @@
 require_relative 'game_view'
+require_relative 'computer_ai'
 
 class Battleship
   BREAKER = "\n---------------------------\n"
-  def initialize
+  def initialize(settings=nil)
     @home       = home
     @enemy      = enemy
     @enemy_mock = enemy_mock
@@ -65,12 +66,20 @@ class Battleship
   end
 
   def shoot_home
-    home.shoot(home.send(:random_coord))
+    if enemy.class == ComputerAI
+      home.smart_shot
+    else
+      home.shoot(home.send(:random_coord))
+    end
   end
 
   private
 
-  def enemy
-    @enemy ||= Game.new
+  def enemy(settings)
+    if settings == "hard"
+      @enemy ||= ComputerAI.new
+    else
+      @enemy ||= Game.new
+    end
   end
 end
