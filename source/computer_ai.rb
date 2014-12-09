@@ -45,9 +45,17 @@ class ComputerAI < Game
     board_value == HIT
   end
 
+  def get_valid_shot
+    shot = random_coord
+    until !already_tried? shot
+      shot = random_coord
+    end
+    shot
+  end
+
   def smart_shot
     if next_coord.empty?
-      shot = random_coord
+      shot = get_valid_shot
       
       shot_value = shoot(shot)
 
