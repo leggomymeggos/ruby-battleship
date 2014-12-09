@@ -10,7 +10,7 @@ class ComputerAI < Game
     @next_coord ||= Array.new
   end
 
-  def get_current_and_surrounding_coords(coords) # there has to be a better way to do this...
+  def get_surrounding_coords(coords) # there has to be a better way to do this...
     to_shoot = []
     x = coords.first
     y = coords.last
@@ -28,7 +28,7 @@ class ComputerAI < Game
     hits_here = []
     get_current_and_surrounding_coords(coords).each do |coord|
       if space_at(coord) == Game::HIT
-        hits_here << stringify_coords(coord)
+        hits_here << coord
       end
     end
     hits_here
