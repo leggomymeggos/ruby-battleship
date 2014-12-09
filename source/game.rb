@@ -190,8 +190,12 @@ class Game
     ships.select { |ship| ship.name == ship_type }[0]
   end
 
+  def valid_coord?(coord)
+    coord.match(/\A[a-jA-J]\d{1,2}\z/)
+  end
+
   def get_coords(coord)
-    raise InvalidCoordinateError, InvalidCoordinateError.standard(coord) unless coord.match(/\A[a-jA-J]\d{1,2}\z/) # e.g. "B5"; "C10"
+    raise InvalidCoordinateError, InvalidCoordinateError.standard(coord) unless valid_coord?(coord) # e.g. "B5"; "C10"
 
     coord_arr = []
     if coord.length == CoordConstants.acceptable_coord_lengths[-1]
