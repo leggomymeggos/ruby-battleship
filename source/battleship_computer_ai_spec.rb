@@ -8,9 +8,9 @@ describe "ComputerAI" do
     expect( computer ).to be_a( Game::ComputerAI )
   end
 
-  describe '#get_current_and_surrounding_coords' do
+  describe '#get_surrounding_coords' do
     it 'finds coordinates around given coord' do
-      expect( computer.get_current_and_surrounding_coords([3, 4]) ).to eq([[3, 4], [3, 3], [3, 5], [2, 4], [4, 4]] )
+      expect( computer.get_surrounding_coords([3, 4]) ).to eq([ [3, 3], [3, 5], [2, 4], [4, 4]] )
     end
   end
 
@@ -20,7 +20,7 @@ describe "ComputerAI" do
           }
 
     it 'finds hits around in the immediate vicinity of the coordinates' do
-      expect( computer.find_hits([4, 4]) ).to eq( ["D5", "F5"] )
+      expect( computer.find_hits([4, 4]) ).to eq( [[3, 4], [5, 4]] )
     end
   end
 end

@@ -24,12 +24,12 @@ class ComputerAI < Game
   end
 
   def stringify_surrounding_coords(coord_collection)
-    coord_collection.map( |coord| stringify_coords(coord) )
+    coord_collection.map{ |coord| stringify_coords(coord) }
   end
 
   def find_hits(coords)
     hits_here = []
-    get_current_and_surrounding_coords(coords).each do |coord|
+    get_surrounding_coords(coords).each do |coord|
       if space_at(coord) == Game::HIT
         hits_here << coord
       end
