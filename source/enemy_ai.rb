@@ -1,6 +1,6 @@
 require_relative 'game'
 
-class EnemyAI < Game
+class Computer_AI < Game
   def initialize
     super
     @next_coord = next_coord
