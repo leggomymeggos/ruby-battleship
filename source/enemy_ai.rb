@@ -38,7 +38,24 @@ class EnemyAI < Game
     shot_coords.include? coord
   end
 
-  def get_next_coord?(board_value)
+  def shot_hit?(board_value)
     board_value == HIT
+  end
+
+  def smart_shot
+    if next_coord.empty?
+      shot = random_coord
+      
+      shot_value = shoot(shot)
+
+      repopulate_next_coord(shot) if shot_hit?(shot_value)
+    else
+      shoot(next_coord.pop)
+    end
+  end
+
+  def repopulate_next_coord(shot)
+    coord = get_coords(shot)
+    @next_coord = find_hits(coord)
   end
 end
