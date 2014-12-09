@@ -1,0 +1,31 @@
+require_relative 'game'
+
+class EnemyAI < Game
+  def get_current_and_surrounding_coords(coords) # there has to be a better way to do this...
+    to_shoot = []
+    x = coords.first
+    y = coords.last
+
+    to_shoot << [x, y]
+    to_shoot << [x, (y - 1)]
+    to_shoot << [x, (y + 1)]
+    to_shoot << [(x - 1), y]
+    to_shoot << [(x + 1), y]
+    
+    to_shoot
+  end
+
+  def find_hits(coords)
+    hits_here = []
+    get_surrounding_coords(coords).each do |coord|
+      if space_at(coord) == Game::HIT
+        hits_here << coord
+      end
+    end
+    hits_here
+  end
+
+  def already_tried?(coord)
+    shot_coords.include? coord
+  end
+end
