@@ -1,6 +1,6 @@
 require_relative 'game'
 
-class Computer_AI < Game
+class ComputerAI < Game
   def initialize
     super
     @next_coord = next_coord
@@ -28,7 +28,7 @@ class Computer_AI < Game
     hits_here = []
     get_current_and_surrounding_coords(coords).each do |coord|
       if space_at(coord) == Game::HIT
-        hits_here << coord
+        hits_here << stringify_coords(coord)
       end
     end
     hits_here

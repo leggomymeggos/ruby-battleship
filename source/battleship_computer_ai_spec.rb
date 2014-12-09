@@ -20,7 +20,7 @@ describe "ComputerAI" do
           }
 
     it 'finds hits around in the immediate vicinity of the coordinates' do
-      expect( computer.find_hits([4, 4]) ).to eq( [[3, 4], [5, 4]] )
+      expect( computer.find_hits([4, 4]) ).to eq( ["D5", "F5"] )
     end
   end
 end
