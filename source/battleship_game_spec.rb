@@ -1,4 +1,6 @@
 require_relative 'game'
+require 'coveralls'
+Coveralls.wear!
 
 describe 'Game' do
   let(:game){ Game.new }

@@ -1,4 +1,6 @@
 require_relative 'computer_ai'
+require 'coveralls'
+Coveralls.wear!
 
 describe "ComputerAI" do
   let(:computer){ ComputerAI.new }
