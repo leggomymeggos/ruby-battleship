@@ -12,29 +12,6 @@ class BattleshipController
   def start
     puts GameView.welcome
   end
-
-  def place_ships
-    puts GameView.ship_options
-    print GameView.prompt
-    ships = gets.chomp
-
-    if ships == "M"
-      battle.home.ships.each do |ship|
-        puts battle.home
-        puts GameView.place_ship(ship.name)
-        print GameView.prompt
-        ship_start = gets.chomp
-        
-        puts GameView.direction
-        print GameView.prompt
-        ship_direction = gets.chomp
-        
-        puts error_catch{
-          battle.home.place_ship(ship.name, ship_start, ship_direction)
-        }
-      end
-    end
-  end
   
   def run!
     input = ""
@@ -56,6 +33,29 @@ class BattleshipController
     if battle.winner
       puts battle
       puts GameView.winner(battle.winner)
+    end
+  end
+
+  def place_ships
+    puts GameView.ship_options
+    print GameView.prompt
+    ships = gets.chomp
+
+    if ships == "M"
+      battle.home.ships.each do |ship|
+        puts battle.home
+        puts GameView.place_ship(ship.name)
+        print GameView.prompt
+        ship_start = gets.chomp
+        
+        puts GameView.direction
+        print GameView.prompt
+        ship_direction = gets.chomp
+        
+        puts error_catch{
+          battle.home.place_ship(ship.name, ship_start, ship_direction)
+        }
+      end
     end
   end
 
