@@ -56,13 +56,12 @@ class ComputerAI < Game
   def smart_shot
     if next_coord.empty?
       shot = get_valid_shot
-      
       shot_value = shoot(shot)
-
-      repopulate_next_coord(shot) if shot_hit?(shot_value)
+      return repopulate_next_coord(shot) if shot_hit?(shot_value)
     else
-      shoot(next_coord.pop)
+      return shoot(next_coord.shift)
     end
+    []
   end
 
   def repopulate_next_coord(shot)
