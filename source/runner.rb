@@ -6,11 +6,15 @@ class BattleshipController
   end
 
   def battle
-    @battle ||= Battleship.new
+    @battle
   end
 
   def start
     puts GameView.welcome
+    puts GameView.game_options
+    print GameView.prompt
+    input = gets.chomp
+    @battle = Battleship.new(level: input)
   end
   
   def run!

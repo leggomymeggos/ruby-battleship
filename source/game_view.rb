@@ -17,12 +17,15 @@ class GameView
               ************* Welcome to Battleship! **************
                   the game where you don't get in trouble
                         for shooting at your friends
-
-Type "A" to let the computer place your ships. Type "M" to place them yourself.
 welcome
   end
 
+  def self.game_options
+    "Pick your level: \"easy\" or \"hard\"."
+  end
+
   def self.ship_options
+    "Type \"A\" to let the computer place your ships. Type \"M\" to place them yourself."    
   end
 
   def self.place_ship(ship_name)
