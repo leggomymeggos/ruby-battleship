@@ -1,4 +1,4 @@
-require_relative 'errors_and_constants.rb'
+require_relative 'errors_and_constants'
 
 class Board
   include BoardConstants

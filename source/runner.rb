@@ -1,4 +1,4 @@
-require_relative 'battleship.rb'
+require_relative 'battleship'
 
 class BattleshipController
   def initialize

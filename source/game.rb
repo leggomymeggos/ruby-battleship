@@ -1,4 +1,4 @@
-require_relative 'board_and_ship.rb'
+require_relative 'board_and_ship'
 
 class Game
   include ShipConstants
