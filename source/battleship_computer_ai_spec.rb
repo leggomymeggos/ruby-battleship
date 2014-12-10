@@ -12,6 +12,14 @@ describe "ComputerAI" do
     it 'finds coordinates around given coord' do
       expect( computer.get_surrounding_coords([3, 4]) ).to eq([ [3, 3], [3, 5], [2, 4], [4, 4]] )
     end
+
+    it 'doesn\'t include coordinates that are off the board' do
+      expect( computer.get_surrounding_coords([0, 0]) ).not_to include([-1, 0], [0, -1]
+        )
+      expect( computer.get_surrounding_coords([9, 9]) ).not_to include([9, 10], [10, 9])
+      expect( computer.get_surrounding_coords([7, 9]) ).not_to include([7, 10])
+      expect( computer.get_surrounding_coords([9, 4]) ).not_to include([10, 4])
+    end
   end
 
   describe '#find_hits' do
@@ -38,6 +46,12 @@ describe "ComputerAI" do
     it 'doesn\'t list coordinates that have already been hit' do
       computer.shot_coords << "B4"
       expect( computer.new_valid_shots("B3") ).not_to include("B4")
+    end
+  end
+
+  describe '#get_valid_shot' do
+    it 'returns a string coordinate' do
+      expect( computer.get_valid_shot ).to match(/\A[a-jA-J]\d{1,2}\z/)
     end
   end
 end

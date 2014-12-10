@@ -16,9 +16,9 @@ class ComputerAI < Game
     y = coords.last
 
     to_shoot << [x, (y - 1)] unless y == 0
-    to_shoot << [x, (y + 1)] unless y >= board.length
+    to_shoot << [x, (y + 1)] unless y >= (board.length - 1)
     to_shoot << [(x - 1), y] unless x == 0
-    to_shoot << [(x + 1), y] unless x >= board.length
+    to_shoot << [(x + 1), y] unless x >= (board.length - 1)
     
     to_shoot
   end
