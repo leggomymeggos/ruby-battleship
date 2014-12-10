@@ -2,16 +2,17 @@ require_relative 'game_view'
 require_relative 'computer_ai'
 
 class Battleship
+  attr_reader :level
   BREAKER = "\n---------------------------\n"
-  def initialize(settings=nil)
-    @home       = home
+  def initialize(settings={})
+    @level      = settings.fetch(:level){ "easy" }
     @enemy      = enemy
     @enemy_mock = enemy_mock
-    @settings   = settings
+    @home       = home
   end
 
   def home
-    @home ||= Game.new
+    @home ||= which_enemy
   end
 
   def enemy_mock
@@ -67,7 +68,7 @@ class Battleship
   end
 
   def shoot_home
-    if enemy.class == ComputerAI
+    if level == "hard"
       home.smart_shot
     else
       home.shoot(home.send(:random_coord))
@@ -77,11 +78,11 @@ class Battleship
   private
 
   def enemy
-    @enemy ||= which_enemy
+    @enemy ||= Game.new
   end
 
   def which_enemy
-    if @settings == "hard"
+    if level == "hard"
       ComputerAI.new
     else
       Game.new
