@@ -5,7 +5,7 @@ describe "ComputerAI" do
   before(:each){ computer.populate_board }
 
   it 'inherits from the Game class' do
-    expect( computer ).to be_a( Game::ComputerAI )
+    expect( computer.class.superclass ).to be( Game )
   end
 
   describe '#get_surrounding_coords' do
@@ -21,6 +21,23 @@ describe "ComputerAI" do
 
     it 'finds hits around in the immediate vicinity of the coordinates' do
       expect( computer.find_hits([4, 4]) ).to eq( [[3, 4], [5, 4]] )
+    end
+  end
+
+  describe '#smart_shot' do
+    it 'updates #next_coord' do
+      expect(computer.smart_shot).to eq(computer.next_coord)
+    end
+  end
+
+  describe '#new_valid_shots' do
+    it 'returns a list of coordinates surrounding a starting point' do
+      expect( computer.new_valid_shots("B3") ).to eq(["B2", "B4", "A3", "C3"])
+    end
+
+    it 'doesn\'t list coordinates that have already been hit' do
+      computer.shot_coords << "B4"
+      expect( computer.new_valid_shots("B3") ).not_to include("B4")
     end
   end
 end
