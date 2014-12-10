@@ -1,4 +1,4 @@
-require_relative 'battleship.rb'
+require_relative 'board_and_ship'
 
 describe "Board" do
   let(:board){ Board.new }
