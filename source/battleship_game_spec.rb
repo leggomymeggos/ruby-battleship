@@ -87,33 +87,11 @@ describe 'Game' do
 
     it 'updates the board to reflect a hit or miss' do
       game.shoot("C1")
-      expect( game.board[0][2] ).not_to include( BoardConstants.blank_space )
+      expect( game.board.board[0][2] ).not_to include( BoardConstants.blank_space )
     end
 
     it 'doesn\'t let the user fire at a board when the game hasn\'t been started', broken: true do
       expect{ game.shoot("C1") }.to raise_error( GameError )
-    end
-  end
-
-  describe '#row' do
-    it 'is a private method' do
-      expect{ game.row(3) }.to raise_error( NoMethodError )
-    end
-
-    it 'returns the correct row from the board' do
-      game.populate_board
-      expect( game.send(:row, 3) ).to eq(game.board[3])
-    end
-  end
-
-  describe '#column' do
-    it 'is a private method' do
-      expect{ game.column(3) }.to raise_error( NoMethodError )
-    end
-
-    it 'returns the correct column from the board' do
-      board_column = game.board.map.each { |row| row[4] }
-      expect( game.send(:column, 4) ).to eq(board_column)
     end
   end
 

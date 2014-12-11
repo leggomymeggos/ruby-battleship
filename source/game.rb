@@ -10,13 +10,13 @@ class Game
   MISS = "o".colorize(:light_blue)
 
   def initialize
-    @board = set_board
+    @board = board
     @ships = ships
     @shot_coords = shot_coords
   end
 
   def board
-    @board.board
+    @board ||= Board.new
   end
 
   def ships
@@ -44,9 +44,9 @@ class Game
     x = coord.last
     y = coord.first
     if hit?(coord)
-      board[x][y] = HIT
+      board.board[x][y] = HIT
     else
-      board[x][y] = MISS
+      board.board[x][y] = MISS
     end
   end
 
@@ -79,7 +79,7 @@ class Game
         ending = check_ship_length(horz_coord, ship.length)
 
         until horz_coord > ending
-          board[vert_coord][horz_coord] = ship.abbr
+          board.board[vert_coord][horz_coord] = ship.abbr
           horz_coord += 1
         end
 
@@ -87,7 +87,7 @@ class Game
         ending = check_ship_length(vert_coord, ship.length)
         
         until vert_coord > ending
-          board[vert_coord][horz_coord] = ship.abbr
+          board.board[vert_coord][horz_coord] = ship.abbr
           vert_coord += 1
         end
       end
@@ -116,11 +116,11 @@ class Game
     x = coord[1]
     y = coord[0]
 
-    board[x][y] == BoardConstants.blank_space
+    board.board[x][y] == BoardConstants.blank_space
   end
 
   def space_at(coords)
-    board[coords.last][coords.first]
+    board.board[coords.last][coords.first]
   end
 
   def random_direction
@@ -151,11 +151,11 @@ class Game
     vert_coord = coords[1]
     
     if direction == "horizontal"
-      current_row = row(vert_coord)
+      current_row = board.row(vert_coord)
       ending = check_ship_length(horz_coord, ship.length)
       return current_row[horz_coord..ending].all? { |space| space == BoardConstants.blank_space }
     else
-      current_column = column(horz_coord)
+      current_column = board.column(horz_coord)
       ending = check_ship_length(vert_coord, ship.length)
       return current_column[vert_coord..ending].all? { |space| space == BoardConstants.blank_space }
     end
@@ -169,14 +169,6 @@ class Game
       checker = check_ship_length(coords[1], ship.length)
     end
     checker < 10
-  end
-
-  def row(coord)
-    board[coord]
-  end
-
-  def column(coord)
-    board.transpose[coord]
   end
 
   def find_ship(ship_type)
@@ -218,10 +210,6 @@ class Game
     else
       raise InvalidCoordinateError, InvalidCoordinateError.not_on_board
     end
-  end
-
-  def set_board
-    @board ||= Board.new
   end
 
   def ships_init

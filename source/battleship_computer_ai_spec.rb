@@ -23,8 +23,8 @@ describe "ComputerAI" do
   end
 
   describe '#find_hits' do
-    before{ computer.board[4][5] = Game::HIT
-            computer.board[4][3] = Game::HIT
+    before{ computer.board.board[4][5] = Game::HIT
+            computer.board.board[4][3] = Game::HIT
           }
 
     it 'finds hits around in the immediate vicinity of the coordinates' do

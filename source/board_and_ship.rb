@@ -30,6 +30,22 @@ class Board
     rendered_board.join("\n")
   end
 
+  def row(coord)
+    board[coord]
+  end
+
+  def column(coord)
+    board.transpose[coord]
+  end
+
+  def flatten
+    board.flatten
+  end
+
+  def length
+    BOARD_LENGTH
+  end
+
   private
 
   def set_board
