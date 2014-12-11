@@ -17,6 +17,7 @@ class GameView
               ************* Welcome to Battleship! **************
                   the game where you don't get in trouble
                         for shooting at your friends
+                          
 welcome
   end
 
