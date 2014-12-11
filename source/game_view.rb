@@ -17,7 +17,7 @@ class GameView
               ************* Welcome to Battleship! **************
                   the game where you don't get in trouble
                         for shooting at your friends
-                          
+
 welcome
   end
 
@@ -30,7 +30,7 @@ welcome
   end
 
   def self.place_ship(ship_name)
-    "Pick a starting coordinate to place #{ship_name}."
+    "Pick a starting coordinate to place the #{ship_name}."
   end
 
   def self.direction
