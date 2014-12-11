@@ -1,6 +1,4 @@
 require_relative 'board_and_ship'
-require 'coveralls'
-Coveralls.wear!
 
 describe "Ship" do 
   let(:aircraft_carrier){ Ship.new("Aircraft carrier") }
