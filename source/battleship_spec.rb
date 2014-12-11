@@ -1,4 +1,6 @@
 require_relative 'battleship'
+require 'coveralls'
+Coveralls.wear!
 
 describe "Battleship" do
   let(:battle){ Battleship.new }
