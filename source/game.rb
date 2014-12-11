@@ -176,13 +176,7 @@ class Game
   end
 
   def column(coord)
-    col = []
-    index = 0
-    until col.length == board.length
-      col << board[index][coord]
-      index += 1
-    end
-    col
+    board.transpose[coord]
   end
 
   def find_ship(ship_type)
