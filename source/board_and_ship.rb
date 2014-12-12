@@ -16,16 +16,14 @@ class Board
 
   def render
     rendered_board = []
-    first_row = TOP_LABEL
+    rendered_board << first_row
     
-    rendered_board << first_row.join(" ").colorize(:yellow)
-    
-    board.each.with_index(1) do |row, index|
-      num = index.to_s
-      if num.length == 1
-        num = " " + num
+    BOARD_LENGTH.times do |num|
+      row_num = num.to_s
+      if row_num.length == 1
+        row_num = " " + row_num
       end
-      rendered_board << (num.colorize(:yellow) + " ") + row.join(" ")
+      rendered_board << (row_num.colorize(:yellow) + " ") + row(num).join(" ")
     end
     rendered_board.join("\n")
   end
@@ -38,15 +36,11 @@ class Board
     board.transpose[coord]
   end
 
-  def flatten
-    board.flatten
-  end
-
-  def length
-    BOARD_LENGTH
-  end
-
   private
+
+  def first_row
+    TOP_LABEL.join(" ").colorize(:yellow)
+  end
 
   def set_board
     new_board = []
