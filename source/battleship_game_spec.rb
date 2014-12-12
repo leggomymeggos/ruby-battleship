@@ -87,7 +87,7 @@ describe 'Game' do
 
     it 'updates the board to reflect a hit or miss' do
       game.shoot("C1")
-      expect( game.board.board[0][2] ).not_to include( BoardConstants.blank_space )
+      expect( game.board[0][2] ).not_to include( BoardConstants.blank_space )
     end
 
     it 'doesn\'t let the user fire at a board when the game hasn\'t been started', broken: true do

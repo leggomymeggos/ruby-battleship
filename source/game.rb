@@ -10,12 +10,16 @@ class Game
   MISS = "o".colorize(:light_blue)
 
   def initialize
-    @board = board
+    @board = set_board
     @ships = ships
     @shot_coords = shot_coords
   end
 
   def board
+    @board.board 
+  end
+
+  def set_board
     @board ||= Board.new
   end
 
@@ -44,9 +48,9 @@ class Game
     x = coord.last
     y = coord.first
     if hit?(coord)
-      board.board[x][y] = HIT
+      board[x][y] = HIT
     else
-      board.board[x][y] = MISS
+      board[x][y] = MISS
     end
   end
 
@@ -79,7 +83,7 @@ class Game
         ending = check_ship_length(horz_coord, ship.length)
 
         until horz_coord > ending
-          board.board[vert_coord][horz_coord] = ship.abbr
+          board[vert_coord][horz_coord] = ship.abbr
           horz_coord += 1
         end
 
@@ -87,7 +91,7 @@ class Game
         ending = check_ship_length(vert_coord, ship.length)
         
         until vert_coord > ending
-          board.board[vert_coord][horz_coord] = ship.abbr
+          board[vert_coord][horz_coord] = ship.abbr
           vert_coord += 1
         end
       end
@@ -116,11 +120,11 @@ class Game
     x = coord[1]
     y = coord[0]
 
-    board.board[x][y] == BoardConstants.blank_space
+    board[x][y] == BoardConstants.blank_space
   end
 
   def space_at(coords)
-    board.board[coords.last][coords.first]
+    board[coords.last][coords.first]
   end
 
   def random_direction
@@ -151,11 +155,11 @@ class Game
     vert_coord = coords[1]
     
     if direction == "horizontal"
-      current_row = board.row(vert_coord)
+      current_row = @board.row(vert_coord)
       ending = check_ship_length(horz_coord, ship.length)
       return current_row[horz_coord..ending].all? { |space| space == BoardConstants.blank_space }
     else
-      current_column = board.column(horz_coord)
+      current_column = @board.column(horz_coord)
       ending = check_ship_length(vert_coord, ship.length)
       return current_column[vert_coord..ending].all? { |space| space == BoardConstants.blank_space }
     end

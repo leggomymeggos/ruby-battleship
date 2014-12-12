@@ -16,7 +16,7 @@ describe "Battleship" do
       end
 
       it 'updates the home board to reflect the shot' do
-        expect{ battle.shoot_home }.to change{ battle.home.board.render }
+        expect{ battle.shoot_home }.to change{ battle.home.to_s }
       end
     end
   end
@@ -39,12 +39,12 @@ describe "Battleship" do
   
   describe '#start' do
     it 'populates the home board' do
-      expect{ battle.start }.to change{ battle.home.board.render }
+      expect{ battle.start }.to change{ battle.home.to_s }
       expect( battle.home.send(:no_more_ships) ).to be false
     end
 
     it 'populates the enemy board' do
-      expect{ battle.start }.to change{ battle.send(:enemy).board.render }
+      expect{ battle.start }.to change{ battle.send(:enemy).to_s }
       expect( battle.send(:enemy).send(:no_more_ships) ).to be false
     end
   end

@@ -29,7 +29,7 @@ class Battleship
   end
 
   def update_enemy_mock
-    enemy.board.board.each_with_index do |row, x|
+    enemy.board.each_with_index do |row, x|
       y = 0
       row.each do |space|
         if space == Game::HIT || space == Game::MISS
