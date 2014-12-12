@@ -19,7 +19,7 @@ class Board
     rendered_board << first_row
     
     BOARD_LENGTH.times do |num|
-      row_num = num.to_s
+      row_num = (num + 1).to_s
       if row_num.length == 1
         row_num = " " + row_num
       end
