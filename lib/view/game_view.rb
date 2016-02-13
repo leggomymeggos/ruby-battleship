@@ -1,10 +1,8 @@
-require_relative 'game'
 
 class GameView
   def initialize(game, enemy_game)
     @game       = game
     @enemy_game = enemy_game
-    @mock_board = mock_board
   end
 
   def render

@@ -1,4 +1,4 @@
-require_relative 'computer_ai'
+require 'spec_helper'
 
 describe "ComputerAI" do
   let(:computer){ ComputerAI.new }
@@ -14,8 +14,7 @@ describe "ComputerAI" do
     end
 
     it 'doesn\'t include coordinates that are off the board' do
-      expect( computer.get_surrounding_coords([0, 0]) ).not_to include([-1, 0], [0, -1]
-        )
+      expect( computer.get_surrounding_coords([0, 0]) ).not_to include([-1, 0], [0, -1])
       expect( computer.get_surrounding_coords([9, 9]) ).not_to include([9, 10], [10, 9])
       expect( computer.get_surrounding_coords([7, 9]) ).not_to include([7, 10])
       expect( computer.get_surrounding_coords([9, 4]) ).not_to include([10, 4])

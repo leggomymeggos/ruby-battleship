@@ -1,11 +1,9 @@
-require_relative 'game_view'
-require_relative 'computer_ai'
 
 class Battleship
   attr_reader :level
   BREAKER = "\n---------------------------\n"
-  def initialize(settings={})
-    @level      = settings.fetch(:level){ "easy" }
+  def initialize(level:"easy")
+    @level      = level
     @enemy      = enemy
     @enemy_mock = enemy_mock
     @home       = home
@@ -45,14 +43,13 @@ class Battleship
   end
 
   def winner
+    winner = nil
     if home.finished?
-      @winner = "Computer"
+      winner = 'Computer'
     elsif enemy.finished?
-      @winner = "Human"
-    else
-      @winner = nil
+      winner = 'Human'
     end
-    @winner
+    winner
   end
 
   def hit?(shot)
@@ -71,7 +68,7 @@ class Battleship
     if level == "hard"
       home.smart_shot
     else
-      home.shoot(home.send(:random_coord))
+      home.shoot(home.random_coord)
     end
   end
 

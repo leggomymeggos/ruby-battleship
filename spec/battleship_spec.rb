@@ -1,4 +1,4 @@
-require_relative 'battleship'
+require 'spec_helper'
 
 describe "Battleship" do
   let(:battle){ Battleship.new }

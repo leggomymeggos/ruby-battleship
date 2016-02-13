@@ -1,4 +1,3 @@
-require_relative 'board_and_ship'
 
 class Game
   include ShipConstants
@@ -62,14 +61,14 @@ class Game
       strung_coords = stringify_coords(coords)
       place_ship(ship.name, strung_coords, direction)
     end
-    return self
+    self
   end
 
   def place_ship(ship_type, coords, direction)
     raise InvalidDirectionError, InvalidDirectionError.unknown_direction unless DIRECTIONS.include? direction
 
     ship = find_ship(ship_type)
-    raise ShipError, ShipError.already_placed if ship.placed == true
+    raise ShipError, ShipError.already_placed if ship.placed
 
     starting_position = get_coords(coords)
     raise ShipError, ShipError.space_taken unless room_for_ship?(starting_position, ship, direction)
@@ -110,6 +109,13 @@ class Game
     Board::TOP_LABEL[horz_coord] + vert_coord.to_s
   end
 
+  def random_coord
+    alpha = (Board::TOP_LABEL[1..board.length]).sample
+    num = (1..board.length).to_a.sample
+    
+    alpha + num.to_s # => "A1"
+  end
+
   private
 
   def hit?(coord)
@@ -131,13 +137,6 @@ class Game
     DIRECTIONS.sample
   end
 
-  def random_coord
-    alpha = (Board::TOP_LABEL[1..board.length]).sample
-    num = (1..board.length).to_a.sample
-    
-    alpha + num.to_s # => "A1"
-  end
-
   def get_valid_start(coords=nil, ship, direction)
     coords = get_coords(random_coord) if coords.nil?
     return coords if valid_placement?(coords, ship, direction)
@@ -157,11 +156,11 @@ class Game
     if direction == "horizontal"
       current_row = @board.row(vert_coord)
       ending = check_ship_length(horz_coord, ship.length)
-      return current_row[horz_coord..ending].all? { |space| space == BoardConstants.blank_space }
+      current_row[horz_coord..ending].all? { |space| space == BoardConstants.blank_space }
     else
       current_column = @board.column(horz_coord)
       ending = check_ship_length(vert_coord, ship.length)
-      return current_column[vert_coord..ending].all? { |space| space == BoardConstants.blank_space }
+      current_column[vert_coord..ending].all? { |space| space == BoardConstants.blank_space }
     end
   end
 

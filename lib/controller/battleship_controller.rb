@@ -1,5 +1,3 @@
-require_relative 'battleship'
-
 class BattleshipController
   def initialize
     @battle = battle
@@ -86,6 +84,3 @@ class BattleshipController
     end
   end
 end
-
-battleship = BattleshipController.new
-battleship.run!

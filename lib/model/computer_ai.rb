@@ -54,7 +54,6 @@ class ComputerAI < Game
   end
 
   def smart_shot
-    shot = nil
     if next_coord.empty?
       shot = get_valid_shot
     else
@@ -64,7 +63,7 @@ class ComputerAI < Game
     if shot_hit?(shot_value)
       repopulate_next_coord(shot)
     else
-      return next_coord
+      next_coord
     end
 
   end

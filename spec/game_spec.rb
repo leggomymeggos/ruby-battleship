@@ -1,4 +1,4 @@
-require_relative 'game'
+require 'spec_helper'
 
 describe 'Game' do
   let(:game){ Game.new }
@@ -110,10 +110,6 @@ describe 'Game' do
   end
 
   describe '#random_coord' do
-    it 'is a private method' do
-      expect{ game.random_coord }.to raise_error( NoMethodError )
-    end
-
     it 'returns a random lettered coordinate' do
       expect( game.send(:random_coord) ).to match(/\A[a-jA-J]\d{1,2}\z/) # e.g. "B5"; "C10"
     end
